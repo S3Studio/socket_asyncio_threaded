@@ -3,6 +3,7 @@
 import asyncio
 from threading import Thread, Event
 import struct
+from contextlib import closing
 
 class ReceiveHandler(object):
     async def read_one_msg(self, reader: asyncio.StreamReader):
@@ -126,14 +127,15 @@ class SocketClient(object):
         self._event_loop.close()
 
     def _call_async(self, coro):
-        if self._event_loop is None:
-            raise SocketClient.NotReadyException()
-        if self._finish_event.is_set():
-            raise SocketClient.FinishedException()
+        with closing(coro):
+            if self._event_loop is None:
+                raise SocketClient.NotReadyException()
+            if self._finish_event.is_set():
+                raise SocketClient.FinishedException()
 
-        self._prepare_event.wait()
+            self._prepare_event.wait()
 
-        return asyncio.run_coroutine_threadsafe(coro, self._event_loop).result()
+            return asyncio.run_coroutine_threadsafe(coro, self._event_loop).result()
 
     async def _prepare(self):
         self._async_reader, self._async_writer = await asyncio.open_connection(self._host, self._port)
