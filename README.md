@@ -33,7 +33,7 @@ Some notes I like to mention:
 
 ## About
 
-Version: 0.0.1
+Version: 0.0.2
 
 Auther: S3Studio
 
