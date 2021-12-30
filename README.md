@@ -25,7 +25,7 @@ if __name__ == '__main__':
 
 This code is used in my project which needs to read and write data with socket occasionally. If only *asyncio* is used, the event loop needs to run in the main thread; and reading/writing data from different threads needs a little bit more resource than coroutine. So I decided to put them together, which is this library.
 
-Some notes I like to mention:
+Some notes I'd like to mention:
 
 * Only client-side is available, and the implementation of server-side is under schedule.
 
